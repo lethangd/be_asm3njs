@@ -49,6 +49,7 @@ const corsOptions = {
     "http://localhost:3001",
     "https://lethangd.github.io/admin_asm3njs",
     "https://lethangd.github.io/client_asm3njs",
+    "https://lethangd.github.io",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
