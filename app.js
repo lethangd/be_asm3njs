@@ -79,7 +79,7 @@ mongoose
     "mongodb+srv://root:123@cluster0.s4kkp.mongodb.net/asm3?retryWrites=true&w=majority"
   )
   .then(() => {
-    server.listen(5000, () => {
+    server.listen(process.env.PORT || 5000, () => {
       console.log("Server is running on port 5000");
     });
 
