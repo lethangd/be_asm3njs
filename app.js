@@ -44,7 +44,12 @@ const fileFilter = (req, file, cb) => {
 
 // Cấu hình CORS
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:3001"],
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://lethangd.github.io/admin_asm3njs",
+    "https://lethangd.github.io/client_asm3njs",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
