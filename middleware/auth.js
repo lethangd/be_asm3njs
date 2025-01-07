@@ -8,7 +8,12 @@ const checkAuth = (roleRequired) => {
   return async (req, res, next) => {
     try {
       let token;
-
+      if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer ")
+      ) {
+        token = req.headers.authorization.split(" ")[1]; // Lấy token từ header
+      }
       if (roleRequired === "admin") {
         token = req.cookies.tokena;
       } else if (roleRequired === "customer") {
@@ -23,13 +28,11 @@ const checkAuth = (roleRequired) => {
 
       // Nếu không tìm thấy token
       if (!token) {
-        return res
-          .status(401)
-          .json({
-            message: "Not authenticated",
-            cookie: req.cookies,
-            header: req.headers,
-          });
+        return res.status(401).json({
+          message: "Not authenticated",
+          cookie: req.cookies,
+          header: req.headers,
+        });
       }
 
       // Xác minh token
