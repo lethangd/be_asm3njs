@@ -55,7 +55,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization", "X-Role"],
   credentials: true,
 };
-app.set("trust proxy", true);
 
 // Middleware
 app.use(cors(corsOptions));
