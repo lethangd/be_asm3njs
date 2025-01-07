@@ -7,18 +7,18 @@ const checkAuth = (roleRequired) => {
   return async (req, res, next) => {
     try {
       // Lấy thông tin Origin hoặc Referer
-      const origin = req.get("Origin") || req.get("Referer");
       let token;
 
-      // Kiểm tra URL từ môi trường local và production
-      const CLIENT_URL = process.env.CLIENT_URL;
-      const ADMIN_URL = process.env.ADMIN_URL;
-
-      // Xác định token dựa trên Origin
-      if (origin && origin.includes(CLIENT_URL)) {
-        token = req.cookies.token; // Token cho Client
-      } else if (origin && origin.includes(ADMIN_URL)) {
-        token = req.cookies.tokena; // Token cho Admin
+      if (roleRequired === "admin") {
+        token = req.cookies.tokena;
+      } else if (roleRequired === "customer") {
+        token = req.cookies.token;
+      } else {
+        if (req.headers["x-role"] === "admin") {
+          token = req.cookies.tokena; // Token cho admin
+        } else if (req.headers["x-role"] === "customer") {
+          token = req.cookies.token; // Token cho customer
+        }
       }
 
       // Nếu không tìm thấy token

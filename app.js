@@ -52,7 +52,7 @@ const corsOptions = {
     "https://lethangd.github.io",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Role"],
   credentials: true,
 };
 
