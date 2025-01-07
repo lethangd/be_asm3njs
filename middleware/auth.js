@@ -13,8 +13,7 @@ const checkAuth = (roleRequired) => {
         req.headers.authorization.startsWith("Bearer ")
       ) {
         token = req.headers.authorization.split(" ")[1]; // Lấy token từ header
-      }
-      if (roleRequired === "admin") {
+      } else if (roleRequired === "admin") {
         token = req.cookies.tokena;
       } else if (roleRequired === "customer") {
         token = req.cookies.token;
