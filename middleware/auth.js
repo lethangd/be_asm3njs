@@ -2,11 +2,11 @@ require("dotenv").config(); // Load biến môi trường từ .env
 
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { cookie } = require("express-validator");
 
 const checkAuth = (roleRequired) => {
   return async (req, res, next) => {
     try {
-      // Lấy thông tin Origin hoặc Referer
       let token;
 
       if (roleRequired === "admin") {
@@ -37,7 +37,13 @@ const checkAuth = (roleRequired) => {
 
       // Kiểm tra quyền
       if (roleRequired && user.role !== roleRequired && user.role !== "admin") {
-        return res.status(403).json({ message: "Not authorized" });
+        return res
+          .status(403)
+          .json({
+            message: "Not authorized",
+            token: token,
+            cookie: req.cookies,
+          });
       }
 
       // Thêm thông tin user vào request để sử dụng ở middleware tiếp theo
