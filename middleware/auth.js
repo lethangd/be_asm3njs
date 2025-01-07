@@ -1,18 +1,24 @@
+require("dotenv").config(); // Load biến môi trường từ .env
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const checkAuth = (roleRequired) => {
   return async (req, res, next) => {
     try {
-      // Kiểm tra yêu cầu đến từ đâu: Customer (localhost:3000) hay Admin (localhost:3001)
-      const origin = req.get("Origin") || req.get("Referer"); // Sử dụng cả Origin và Referer nếu cần
+      // Lấy thông tin Origin hoặc Referer
+      const origin = req.get("Origin") || req.get("Referer");
       let token;
 
-      // Kiểm tra nếu yêu cầu từ Customer hoặc Admin để lấy đúng token
-      if (origin && origin.includes("localhost:3000")) {
-        token = req.cookies.token; // Customer token
-      } else if (origin && origin.includes("localhost:3001")) {
-        token = req.cookies.tokena; // Admin token
+      // Kiểm tra URL từ môi trường local và production
+      const CLIENT_URL = process.env.CLIENT_URL;
+      const ADMIN_URL = process.env.ADMIN_URL;
+
+      // Xác định token dựa trên Origin
+      if (origin && origin.includes(CLIENT_URL)) {
+        token = req.cookies.token; // Token cho Client
+      } else if (origin && origin.includes(ADMIN_URL)) {
+        token = req.cookies.tokena; // Token cho Admin
       }
 
       // Nếu không tìm thấy token
@@ -29,12 +35,12 @@ const checkAuth = (roleRequired) => {
         return res.status(401).json({ message: "User not found" });
       }
 
-      // Kiểm tra quyền của user (ví dụ như roleRequired là 'admin')
+      // Kiểm tra quyền
       if (roleRequired && user.role !== roleRequired && user.role !== "admin") {
         return res.status(403).json({ message: "Not authorized" });
       }
 
-      // Thêm thông tin user vào request để sử dụng ở các middleware tiếp theo
+      // Thêm thông tin user vào request để sử dụng ở middleware tiếp theo
       req.user = user;
       next();
     } catch (err) {
