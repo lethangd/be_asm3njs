@@ -3,7 +3,7 @@ const Product = require("../models/product");
 // Create Product
 exports.createProduct = async (req, res) => {
   try {
-    const { name, price, category, long_desc, short_desc } = req.body;
+    const { name, price, category, long_desc, short_desc, stock } = req.body;
 
     // Lấy danh sách đường dẫn của các hình ảnh
     const images = req.files.map((file) => file.path);
@@ -22,7 +22,7 @@ exports.createProduct = async (req, res) => {
       images,
       long_desc,
       short_desc,
-      stock: req.body.stock || 0,
+      stock: stock || 0,
     });
 
     await product.save();
@@ -68,7 +68,7 @@ exports.updateProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const { name, price, category, long_desc, short_desc } = req.body;
+    const { name, price, category, long_desc, short_desc, stock } = req.body;
 
     // Nếu có file mới được upload, cập nhật hình ảnh
     if (req.files && req.files.length > 0) {
@@ -81,6 +81,7 @@ exports.updateProduct = async (req, res) => {
     product.category = category || product.category;
     product.long_desc = long_desc || product.long_desc;
     product.short_desc = short_desc || product.short_desc;
+    product.stock = stock || product.stock;
 
     await product.save();
     res.status(200).json({ message: "Product updated successfully", product });
